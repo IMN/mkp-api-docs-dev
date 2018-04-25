@@ -614,13 +614,14 @@
           "description": "filter merchants by Source MarketplaceCode",
           "example": "C1"
         },
-        "filterSubscriptionStatusId": {
-          "type": "integer",
-          "description": "filter merchants by SubscriptionStatus"
+        "filterCredentialStatus": {
+          "$ref": "#/definitions/marketplaceCredentialStatus"
         },
-        "filterofferPublicationStatusId": {
-          "type": "integer",
-          "description": "filter merchants by offer publication status"
+        "filterSubscriptionStatus": {
+          "$ref": "#/definitions/marketplaceSubscriptionStatus"
+        },
+        "filterofferPublicationStatus": {
+          "$ref": "#/definitions/marketplaceOfferPublicationStatus"
         }
       }
     },
@@ -675,13 +676,11 @@
           "description": "filter merchants by country code",
           "example": "FRA"
         },
-        "filterSubscriptionStatusId": {
-          "type": "integer",
-          "description": "filter merchants by SubscriptionStatus"
+        "filterSubscriptionStatus": {
+          "$ref": "#/definitions/marketplaceSubscriptionStatus"
         },
-        "filterofferPublicationStatusId": {
-          "type": "integer",
-          "description": "filter merchants by offer publication status"
+        "filterofferPublicationStatus": {
+          "$ref": "#/definitions/marketplaceOfferPublicationStatus"
         }
       }
     },
@@ -938,7 +937,7 @@
         "subscriptionStatus",
         "credentialStatus",
         "shippingSettingsStatus",
-        "offerPublicationStatusId",
+        "offerPublicationStatusd",
         "targetMarketplaceCode"
       ],
       "properties": {
@@ -956,9 +955,8 @@
         "shippingSettingsStatus": {
           "$ref": "#/definitions/marketplaceShippingSettingsStatus"
         },
-        "offerPublicationStatusId": {
-          "type": "integer",
-          "format": "int32"
+        "offerPublicationStatus": {
+          "$ref": "#/definitions/marketplaceOfferPublicationStatus"
         },
         "publishedOfferCount": {
           "type": "integer",
@@ -972,6 +970,9 @@
         },
         "targetMarketplaceCode": {
           "$ref": "#/definitions/marketplaceCode"
+        },
+        "targetMarketplaceMerchantCode": {
+          "$ref": "#/definitions/marketplaceMerchantCode"
         }
       }
     },
@@ -998,11 +999,11 @@
             "subscriptionStatus",
             "credentialStatus",
             "shippingSettingsStatus",
-            "offerPublicationStatusId"
+            "offerPublicationStatus"
           ],
           "properties": {
             "sourceMarketplaceCode": {
-              "$ref": "#/definitions/marketplaceMerchantCode"
+              "$ref": "#/definitions/marketplaceCode"
             },
             "orderCount": {
               "type": "integer",
@@ -1013,10 +1014,42 @@
               "type": "number",
               "format": "decimal",
               "example": 10602.23
+            },
+            "currencyCode": {
+              "$ref": "#/definitions/currencyCode"
+            },
+            "subscriptionHistory": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/marketplaceSubcriptionReporting"
+              }
             }
           }
         }
       ]
+    },
+    "marketplaceSubcriptionReporting": {
+      "type": "object",
+      "required": [
+        "senderEmail",
+        "utcDate",
+        "status"
+      ],
+      "properties": {
+        "senderEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "utcDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/marketplaceSubscriptionStatus"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
     },
     "outgoingMerchantInfo": {
       "allOf": [
@@ -1038,6 +1071,9 @@
           "properties": {
             "sourceMarketplaceCode": {
               "$ref": "#/definitions/marketplaceCode"
+            },
+            "sourceMarketplaceMerchantCode": {
+              "$ref": "#/definitions/marketplaceMerchantCode"
             },
             "targetMarketplaces": {
               "type": "object",
