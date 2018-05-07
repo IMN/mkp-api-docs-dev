@@ -1101,6 +1101,1361 @@
         }
       }
     },
+    "orderChangeEventBase": {
+      "x-exclude": true,
+      "type": "object",
+      "required": [
+        "order",
+        "userId",
+        "userName"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userName": {
+          "$ref": "#/definitions/orderChangeUserName"
+        }
+      }
+    },
+    "orderAccepted": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        }
+      ]
+    },
+    "orderRefused": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        }
+      ]
+    },
+    "orderShipped": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "order",
+            "userId",
+            "userName",
+            "carrierCode",
+            "trackingNumber"
+          ],
+          "properties": {
+            "carrierCode": {
+              "$ref": "#/definitions/carrierCode"
+            },
+            "trackingNumber": {
+              "$ref": "#/definitions/trackingNumber"
+            }
+          }
+        }
+      ]
+    },
+    "orderShippedWithTrackingUrl": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "order",
+            "userId",
+            "userName",
+            "carrierName",
+            "trackingNumber",
+            "trackingUrl"
+          ],
+          "properties": {
+            "carrierName": {
+              "$ref": "#/definitions/carrierName"
+            },
+            "trackingNumber": {
+              "$ref": "#/definitions/trackingNumber"
+            },
+            "trackingUrl": {
+              "$ref": "#/definitions/trackingUrl"
+            }
+          }
+        }
+      ]
+    },
+    "orderRefunded": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "order",
+            "userId",
+            "userName",
+            "refundReason"
+          ],
+          "properties": {
+            "order": {
+              "$ref": "#/definitions/orderIdentifier"
+            },
+            "refundReason": {
+              "$ref": "#/definitions/refundReason"
+            }
+          }
+        }
+      ]
+    },
+    "orderCancelled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderChangeEventBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "order",
+            "userId",
+            "userName",
+            "cancellationReason"
+          ],
+          "properties": {
+            "cancellationReason": {
+              "$ref": "#/definitions/cancellationReason"
+            }
+          }
+        }
+      ]
+    },
+    "imnOrderStatus": {
+      "type": "string",
+      "description": "IMN order status. Unified for all marketplaces.",
+      "example": "Shipped",
+      "x-lov": "IMNOrderState"
+    },
+    "marketplaceOrderStatus": {
+      "description": "The marketplace order state",
+      "type": "string",
+      "example": "In_progress_3"
+    },
+    "marketplaceOrderId": {
+      "description": "The order marketplace identifier",
+      "type": "string",
+      "example": "CDISCOUNT12345"
+    },
+    "imnOrderId": {
+      "description": "The IMN Order identifier",
+      "type": "string",
+      "example": "A0CD3FG",
+      "pattern": "^([A-Z|0-9]){7}$",
+      "x-pattern": "^([A-Z|0-9]){7}$"
+    },
+    "orderChangeUserName": {
+      "type": "string",
+      "description": "The name of the user who did the order change"
+    },
+    "merchantOrderId": {
+      "description": "The order merchant identifier",
+      "type": "string",
+      "example": "MyOrderMerchantId"
+    },
+    "merchantECommerceSoftwareName": {
+      "description": "The e-commerce software name of the merchant",
+      "type": "string",
+      "example": "Prestashop"
+    },
+    "merchantECommerceSoftwareVersion": {
+      "description": "The e-commece software version of the merchant",
+      "type": "string",
+      "example": "123.0.1"
+    },
+    "orderDateSearchType": {
+      "description": "Indicates on which date you want to make the filter",
+      "type": "string",
+      "enum": [
+        "Modification",
+        "Purchase",
+        "MarketPlaceModification"
+      ],
+      "default": "Modification"
+    },
+    "orderEtag": {
+      "description": "ETag value to identify the order.\\\nThis information is required for the operation GetOrder and ChangeOrder.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n",
+      "type": "string",
+      "example": "\"ca071a4580129f932a03971968ffef69\""
+    },
+    "orderProcessing": {
+      "description": "If true, there is currently a harvest or an order change in progress. Otherwise false.",
+      "type": "boolean",
+      "example": false
+    },
+    "orderIdentifier": {
+      "type": "object",
+      "required": [
+        "marketplaceCode",
+        "merchantCode",
+        "imnOrderId"
+      ],
+      "properties": {
+        "marketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        },
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "imnOrderId": {
+          "$ref": "#/definitions/imnOrderId"
+        }
+      }
+    },
+    "carrierName": {
+      "type": "string",
+      "description": "The carrier name related to the shipping",
+      "example": "My special carrier name"
+    },
+    "trackingUrl": {
+      "type": "string",
+      "description": "The tracking url related to the shipping",
+      "example": "https://trackingpackage.com?number=1H01845163783"
+    },
+    "trackingNumber": {
+      "type": "string",
+      "description": "The shipper tracking number related to the shipping",
+      "example": "1H01845163783"
+    },
+    "carrierCode": {
+      "type": "string",
+      "example": "MondialRelay",
+      "description": "The carrier code related to the shipping\n* DeutschePost: DeutschePost\n* DHL: DHL\n* GLS: GLS\n* TNT: TNT\n* UPS: UPS\n* DPD: DPD\n* FEDEX: FEDEX\n* 4PX: 4PX\n* Bpost: Bpost\n* ChinaEMSePacket: China EMS (ePacket)\n* ChinaPost: China Post\n* Chronopost: Chronopost\n* CNEExpress: CNE Express\n* ColisPrive: Colis PrivÃ©\n* Colissimo: Colissimo\n* GEODIS: GEODIS\n* LaPosteCourrier: La Poste - Courrier\n* MalaysiaPost: Malaysia Post\n* MondialRelay: Mondial Relay\n* PostNL: PostNL\n* RelaisColis: Relais Colis\n* RoyalMail: Royal Mail\n* SFExpress: SF Express\n* SFCService: SFC Service\n* SingaporePost: Singapore Post\n* USPS: USPS\n* Yanwen: Yanwen\n* AMATI: AMATI\n* BRTID: BRTID\n* BRTRIFMIT: BRTRIFMIT\n* BRTSPED: BRTSPED\n* CORREOS: CORREOS\n* ENERGO: ENERGO\n* FERCAM: FERCAM\n* NEXIVE: NEXIVE\n* ItalianPost: Italian Post\n* SDA: SDA\n* SGTFlyer: SGT Flyer\n* TECNOTRANS: TECNOTRANS\n* Bursped: Bursped\n* Cargoline: Cargoline\n* Computeruniverse: Computeruniverse\n* Dachser: Dachser\n* DHLFreight: DHL Freight\n* dtl: dtl\n* Emons: Emons\n* GEL: GEL\n* Hellmann: Hellmann\n* Hermes: Hermes\n* Hermes2MH: Hermes 2 MH\n* IDSLogistik: IDS Logistik\n* Iloxx: Iloxx\n* KuehneNagel: Kuehne & Nagel\n* Marktanlieferung: Marktanlieferung\n* Rhenus: Rhenus\n* Schenker: Schenker\n* SpeditionGuettler: Spedition Guettler\n",
+      "enum": [
+        "DeutschePost",
+        "DHL",
+        "GLS",
+        "TNT",
+        "UPS",
+        "DPD",
+        "FEDEX",
+        "4PX",
+        "Bpost",
+        "ChinaEMSePacket",
+        "ChinaPost",
+        "Chronopost",
+        "CNEExpress",
+        "ColisPrive",
+        "Colissimo",
+        "GEODIS",
+        "LaPosteCourrier",
+        "MalaysiaPost",
+        "MondialRelay",
+        "PostNL",
+        "RelaisColis",
+        "RoyalMail",
+        "SFExpress",
+        "SFCService",
+        "SingaporePost",
+        "USPS",
+        "Yanwen",
+        "AMATI",
+        "BRTID",
+        "BRTRIFMIT",
+        "BRTSPED",
+        "CORREOS",
+        "ENERGO",
+        "FERCAM",
+        "NEXIVE",
+        "ItalianPost",
+        "SDA",
+        "SGTFlyer",
+        "TECNOTRANS",
+        "Bursped",
+        "Cargoline",
+        "Computeruniverse",
+        "Dachser",
+        "DHLFreight",
+        "dtl",
+        "Emons",
+        "GEL",
+        "Hellmann",
+        "Hermes",
+        "Hermes2MH",
+        "IDSLogistik",
+        "Iloxx",
+        "KuehneNagel",
+        "Marktanlieferung",
+        "Rhenus",
+        "Schenker",
+        "SpeditionGuettler"
+      ]
+    },
+    "cancellationReason": {
+      "type": "string",
+      "description": "The reason why you cancel the order",
+      "enum": [
+        "WrongPrice",
+        "DelayedInventory",
+        "WrongProductInfo",
+        "BuyerFeedbackTimeout",
+        "BuyerAgreement",
+        "BuyerCancelled",
+        "NoInventory",
+        "ShippingAddressUndeliverable",
+        "Other"
+      ]
+    },
+    "refundReason": {
+      "type": "string",
+      "description": "The reason why you refund the order",
+      "enum": [
+        "BuyerWarrantyOrRetractation",
+        "WrongPrice",
+        "LateDelivery",
+        "IncorrectDelivery",
+        "IncompleteDelivery",
+        "DamagedDelivery",
+        "BuyerFeedbackTimeout",
+        "BuyerAgreement",
+        "BuyerCancelled",
+        "NoInventory",
+        "ShippingAddressUndeliverable",
+        "Other"
+      ]
+    },
+    "orderItem": {
+      "description": "Describe an order item.",
+      "type": "object",
+      "required": [
+        "imnOrderItemId"
+      ],
+      "properties": {
+        "imnOrderItemId": {
+          "description": "The IMN identifier of the order Item. Must be unique in the order.",
+          "type": "string",
+          "example": "1"
+        },
+        "title": {
+          "description": "The title of the order item",
+          "example": "bLA acide-plomb 6v-4.5ah 70x48x106mm",
+          "type": "string"
+        },
+        "condition": {
+          "description": "The condition of the order item",
+          "example": "new",
+          "type": "string"
+        },
+        "imageUrl": {
+          "description": "The URL of the image of the order item",
+          "example": "http://blabla.com//das6-45.jpg",
+          "type": "string"
+        },
+        "merchantOfferSku": {
+          "$ref": "#/definitions/sku"
+        },
+        "gtin": {
+          "$ref": "#/definitions/gtin"
+        },
+        "marketPlaceProductId": {
+          "description": "The marketplace product identifier of the order item",
+          "example": "MarketplaceProductId",
+          "type": "string"
+        },
+        "marketplaceProductUrl": {
+          "$ref": "#/definitions/httpUrl"
+        },
+        "itemPrice": {
+          "description": "The price of the order item",
+          "example": 6.86,
+          "type": "number",
+          "format": "decimal"
+        },
+        "itemTax": {
+          "description": "The tax of the order item",
+          "type": "number",
+          "format": "decimal",
+          "example": 0.0
+        },
+        "quantity": {
+          "description": "The quantity of the order item",
+          "example": 1,
+          "type": "number",
+          "format": "decimal"
+        },
+        "shippingPrice": {
+          "description": "The shipping price of the order item",
+          "type": "number",
+          "example": 0.0,
+          "format": "decimal"
+        },
+        "totalPrice": {
+          "description": "The total price of the order item",
+          "example": 6.86,
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "orderBillingInfo": {
+      "type": "object",
+      "description": "The billing information related to the order",
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/orderCustomer"
+        },
+        "adress": {
+          "$ref": "#/definitions/postalAddress"
+        }
+      }
+    },
+    "orderShippingInfo": {
+      "type": "object",
+      "description": "The shipping information related to the order",
+      "properties": {
+        "contact": {
+          "$ref": "#/definitions/person"
+        },
+        "relayId": {
+          "description": "The company name of The address for this order",
+          "type": "string",
+          "example": "My Company"
+        },
+        "address": {
+          "$ref": "#/definitions/postalAddress"
+        },
+        "price": {
+          "description": "The shipping price of this order",
+          "type": "number",
+          "format": "decimal",
+          "example": 6.9
+        },
+        "method": {
+          "description": "The shipping method of this order",
+          "type": "string",
+          "example": "DPD Domicile"
+        },
+        "fulfilledBy": {
+          "description": "The shipment is fulfilled by",
+          "type": "string",
+          "example": "Cdiscount Fulfillment"
+        },
+        "tax": {
+          "description": "The shipping tax for this order",
+          "type": "number",
+          "format": "decimal",
+          "example": 0.0
+        },
+        "earliestShipUtcDate": {
+          "description": "The UTC date of the earliest ship for this order",
+          "type": "string",
+          "example": "2017-04-02T21:30:00Z",
+          "format": "date-time"
+        },
+        "latestShipUtcDate": {
+          "description": "The UTC date of the latest ship for this order",
+          "type": "string",
+          "format": "date-time",
+          "example": "2017-04-30T21:30:00Z"
+        }
+      }
+    },
+    "orderCustomer": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/person"
+        },
+        {
+          "type": "object",
+          "description": "The customer",
+          "properties": {
+            "customerIdentifier": {
+              "description": "The buyer identifier for this order",
+              "type": "string",
+              "example": "1234567890"
+            }
+          }
+        }
+      ]
+    },
+    "person": {
+      "type": "object",
+      "properties": {
+        "civility": {
+          "description": "The civility of the person",
+          "type": "string",
+          "example": "MRS"
+        },
+        "firstName": {
+          "description": "The first name of the person",
+          "type": "string",
+          "example": "Jacques"
+        },
+        "lastName": {
+          "description": "The last name of the person",
+          "type": "string",
+          "example": "BAUREGARD"
+        },
+        "companyName": {
+          "type": "string",
+          "description": "The company name of the person",
+          "example": "App"
+        },
+        "email": {
+          "$ref": "#/definitions/email"
+        },
+        "phoneNumber": {
+          "$ref": "#/definitions/telephoneNumber"
+        },
+        "mobilePhoneNumber": {
+          "$ref": "#/definitions/telephoneNumber"
+        }
+      }
+    },
+    "telephoneNumber": {
+      "type": "string",
+      "description": "The telephone number",
+      "example": "+33000000042"
+    },
+    "postalAddress": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "description": "The address line 1",
+          "type": "string",
+          "example": "5 rue amÃ©lie"
+        },
+        "line2": {
+          "description": "The address line 2",
+          "type": "string",
+          "example": "BDR"
+        },
+        "line3": {
+          "description": "The address line 3",
+          "type": "string",
+          "example": "RDC"
+        },
+        "comment": {
+          "description": "The comment to access to this address",
+          "type": "string",
+          "example": "The instructions from the buyer"
+        },
+        "postalCode": {
+          "description": "The address postal code",
+          "type": "string",
+          "example": "13014"
+        },
+        "city": {
+          "description": "The address city",
+          "type": "string",
+          "example": "Marseille"
+        },
+        "stateOrRegion": {
+          "description": "The address state or region",
+          "type": "string",
+          "example": "BDR"
+        },
+        "countryName": {
+          "description": "The address country name",
+          "type": "string",
+          "example": "France"
+        },
+        "countryIsoCodeAlpha2": {
+          "description": "The address country iso code alpha 2 (see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#/decoding_table for more details)",
+          "type": "string",
+          "example": "FR"
+        }
+      }
+    },
+    "orderGeneralInfo": {
+      "type": "object",
+      "required": [
+        "marketplaceOrderId",
+        "imnOrderStatus",
+        "marketplaceOrderStatus",
+        "purchaseUtcDate",
+        "marketplaceLastModificationUtcDate"
+      ],
+      "properties": {
+        "marketplaceOrderId": {
+          "$ref": "#/definitions/marketplaceOrderId"
+        },
+        "imnOrderStatus": {
+          "$ref": "#/definitions/imnOrderStatus"
+        },
+        "marketplaceOrderStatus": {
+          "$ref": "#/definitions/marketplaceOrderStatus"
+        },
+        "purchaseUtcDate": {
+          "description": "The purchase date of this order",
+          "format": "date-time",
+          "type": "string",
+          "example": "2017-03-31T21:30:23Z"
+        },
+        "marketplaceLastModificationUtcDate": {
+          "description": "The last modification UTC date done by the marketplace on this order",
+          "format": "date-time",
+          "type": "string",
+          "example": "2017-04-16T10:25:23Z"
+        },
+        "marketPlaceChannel": {
+          "description": "Useful to identify the origin of the order. For example in Cdiscount.",
+          "type": "string",
+          "example": "Cdiscount France"
+        },
+        "comment": {
+          "description": "The comment associated to this order",
+          "type": "string",
+          "example": "This is a comment"
+        }
+      }
+    },
+    "orderMarketplaceInfo": {
+      "description": "Describe the basic information related to an order.",
+      "type": "object",
+      "required": [
+        "identifier",
+        "etag",
+        "generalInfo",
+        "paymentInfo",
+        "billingInfo",
+        "shippingInfo",
+        "etag",
+        "orderItems"
+      ],
+      "properties": {
+        "identifier": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        },
+        "generalInfo": {
+          "$ref": "#/definitions/orderGeneralInfo"
+        },
+        "pricingInfo": {
+          "$ref": "#/definitions/orderPricingInfo"
+        },
+        "billingInfo": {
+          "$ref": "#/definitions/orderBillingInfo"
+        },
+        "shippingInfo": {
+          "$ref": "#/definitions/orderShippingInfo"
+        },
+        "orderItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/orderItem"
+          }
+        }
+      }
+    },
+    "orderPricingInfo": {
+      "type": "object",
+      "required": [
+        "totalPrice",
+        "currencyCode"
+      ],
+      "properties": {
+        "totalPrice": {
+          "description": "The total price of this order (corresponding to the amount paid by the customer)",
+          "format": "decimal",
+          "type": "number",
+          "example": 101.42
+        },
+        "currencyCode": {
+          "$ref": "#/definitions/currencyCode"
+        },
+        "totalTax": {
+          "description": "The total tax of this order",
+          "type": "number",
+          "format": "decimal",
+          "example": 0.0
+        },
+        "totalCommission": {
+          "description": "The total commission of this order",
+          "type": "number",
+          "format": "decimal",
+          "example": 0.0
+        },
+        "additionalFee": {
+          "description": "Additional fee related to this order",
+          "type": "number",
+          "format": "decimal",
+          "example": 10.0
+        },
+        "paymentMethod": {
+          "description": "The payment method of this order",
+          "type": "string",
+          "example": "1 / 1X"
+        },
+        "payingUtcDate": {
+          "description": "The UTC date of the payment of this order",
+          "type": "string",
+          "format": "date-time",
+          "example": "2017-04-01T13:22:01Z"
+        }
+      }
+    },
+    "orderMerchantInfo": {
+      "type": "object",
+      "description": "The information that concerns the merchant for this order",
+      "required": [
+        "merchantOrderId",
+        "merchantECommerceSoftwareName",
+        "merchantECommerceSoftwareVersion"
+      ],
+      "properties": {
+        "merchantOrderId": {
+          "$ref": "#/definitions/merchantOrderId"
+        },
+        "merchantECommerceSoftwareName": {
+          "$ref": "#/definitions/merchantECommerceSoftwareName"
+        },
+        "merchantECommerceSoftwareVersion": {
+          "$ref": "#/definitions/merchantECommerceSoftwareVersion"
+        }
+      }
+    },
+    "orderInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderMarketplaceInfo"
+        },
+        {
+          "type": "object",
+          "description": "Describe in details all informations related to an order.",
+          "required": [
+            "identifier",
+            "etag",
+            "generalInfo",
+            "paymentInfo",
+            "billingInfo",
+            "shippingInfo",
+            "etag",
+            "orderItems",
+            "merchantInfo",
+            "imnInfo"
+          ]
+        }
+      ],
+      "properties": {
+        "merchantInfo": {
+          "$ref": "#/definitions/orderMerchantInfo"
+        },
+        "imnInfo": {
+          "$ref": "#/definitions/orderIMNInfo"
+        }
+      }
+    },
+    "orderIMNInfo": {
+      "type": "object",
+      "required": [
+        "imnOrderUrl",
+        "imnLastModificationUtcDate",
+        "processing"
+      ],
+      "properties": {
+        "imnOrderUrl": {
+          "$ref": "#/definitions/httpUrl"
+        },
+        "imnLastModificationUtcDate": {
+          "description": "The last modification UTC date done by IMN of this order",
+          "format": "date-time",
+          "type": "string",
+          "example": "2017-04-16T10:30:23Z"
+        },
+        "processing": {
+          "$ref": "#/definitions/orderProcessing"
+        }
+      }
+    },
+    "merchantCreated": {
+      "x-format": "Event",
+      "type": "object",
+      "description": "When the merchant creates his account on IMN",
+      "required": [
+        "merchantCode",
+        "userId",
+        "email"
+      ],
+      "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "email": {
+          "$ref": "#/definitions/email"
+        }
+      }
+    },
+    "merchantAcountInfoUpdated": {
+      "x-format": "Event",
+      "description": "When the merchant updates his account information",
+      "type": "object",
+      "required": [
+        "merchantCode",
+        "userId",
+        "companyName",
+        "lastName",
+        "firstName",
+        "country",
+        "phoneNumber"
+      ],
+      "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "companyName": {
+          "$ref": "#/definitions/merchantCompanyName"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/countryIsoCodeAlpha3"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "$ref": "#/definitions/httpUrl"
+        }
+      }
+    },
+    "merchantMarketplaceCredentialConfigured": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "credential"
+          ],
+          "properties": {
+            "credential": {
+              "$ref": "#/definitions/marketplaceApiCredential"
+            },
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceSubscriptionRequested": {
+      "x-format": "Event",
+      "description": "When the merchant marketplace subscription has been requested",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceSubscriptionAccepted": {
+      "x-format": "Event",
+      "description": "When the marketplace accept the mechant subscription request",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceSubscriptionRefused": {
+      "x-format": "Event",
+      "description": "When the marketplace refuses the merchant subscription",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "reason"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "reason": {
+              "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceSubscriptionBlocked": {
+      "x-format": "Event",
+      "description": "When the marketplace blocks the merchant subscription",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "reason"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "reason": {
+              "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
+            }
+          }
+        }
+      ]
+    },
+    "merchantOffersSourceMarketplaceDeclared": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantOffersSourceMarketplaceUndeclared": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOfferImportationEnabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOfferImportationDisabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOfferPublicationEnabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOfferPublicationDisabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOrderImportationEnabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceOrderImportationDisabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "externalMerchantMarketplaceSubscriptionsRequested": {
+      "x-format": "Event",
+      "type": "object",
+      "description": "When the merchant marketplace subscription has been requested",
+      "required": [
+        "merchantCode",
+        "userId",
+        "sourceMarketplaceCode",
+        "targetMarketplacesSubscriptionRequested",
+        "subscriptionRequestUtcDate",
+        "salesforceSubscriptionId"
+      ],
+      "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "sourceMarketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        },
+        "targetMarketplacesSubscriptionRequested": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/marketplaceCode"
+          }
+        },
+        "subscriptionRequestUtcDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The exact date time of the subscription request"
+        },
+        "salesforceSubscriptionId": {
+          "type": "string",
+          "description": "The Salesforce identifier of the subscription",
+          "example": "BLA0O00001v8aNuQAI"
+        }
+      }
+    },
+    "merchantMarketplacePricingSettingConfigured": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "ruleType"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "ruleType": {
+              "$ref": "#/definitions/marketplacePricingRuleType"
+            },
+            "value": {
+              "$ref": "#/definitions/marketplacePricingValue"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceShippingPreprationSettingConfigured": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "preparationRuleType"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "preparationRuleType": {
+              "$ref": "#/definitions/marketplacePreparationRuleType"
+            },
+            "preparationDelay": {
+              "type": "number",
+              "format": "int32",
+              "description": "The delay considering the rule"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceShippingDeliverySettingConfigured": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "deliveryMode",
+            "ruleType"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "deliveryMode": {
+              "$ref": "#/definitions/deliveryMode"
+            },
+            "ruleType": {
+              "$ref": "#/definitions/marketplaceShippingChargeRuleType"
+            },
+            "charge": {
+              "type": "number",
+              "example": 3.35,
+              "description": "The charge for this delivery mode considering the rule"
+            },
+            "additionalCharge": {
+              "type": "number",
+              "example": 1.52,
+              "description": "The additional charge for this delivery mode"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceShippingDeliverySettingDisabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceShippingDeliverySettingDeleted": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceShippingDeliverySettingEnabled": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            }
+          }
+        }
+      ]
+    },
+    "marketplaceMerchantCodeConfigured": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "marketplaceCode",
+            "marketplaceMerchantCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "marketplaceMerchantCode": {
+              "$ref": "#/definitions/marketplaceMerchantCode"
+            }
+          }
+        }
+      ]
+    },
     "marketplaceSubscriptionStatus": {
       "description": "The subscription status",
       "type": "string",
@@ -1407,6 +2762,22 @@
           "type": "object"
         }
       }
+    },
+    "marketplaceApiIntegrationStatus": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down",
+        "paused"
+      ]
+    },
+    "marketplaceStatus": {
+      "type": "string",
+      "description": "Indicate the status of the marketplace",
+      "enum": [
+        "PROD",
+        "TEST"
+      ]
     },
     "firstName": {
       "type": "string",
@@ -2459,6 +3830,31 @@
     }
   ],
   "parameters": {
+    "imnOrderIdParameter": {
+      "description": "The IMN Order identifier",
+      "name": "imnOrderId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "imnOrderId",
+      "x-example": "A0CD3FG"
+    },
+    "userNameInQueryParameter": {
+      "name": "userName",
+      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
+      "in": "query",
+      "required": true,
+      "type": "string"
+    },
+    "testModeInQueryParameter": {
+      "name": "testMode",
+      "description": "If true, the operation will be not be sent to marketplace. But the validation will be taken in account.",
+      "in": "query",
+      "required": false,
+      "type": "boolean",
+      "default": false,
+      "x-example": false
+    },
     "storeIdOnlyGeneralParameters": {
       "name": "storeId",
       "in": "path",
