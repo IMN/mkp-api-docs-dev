@@ -466,7 +466,7 @@
         }
       }
     },
-    "/merchant/offers/v1/{marketplaceCode}/{merchantCode}": {
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}": {
       "post": {
         "tags": [
           "Marketplace API - Offers - Global"
