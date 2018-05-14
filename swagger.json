@@ -1065,6 +1065,9 @@
         },
         "message": {
           "type": "string"
+        },
+        "salesforceSubscriptionId": {
+          "type": "string"
         }
       }
     },
@@ -1141,10 +1144,12 @@
     "orderChangeEventBase": {
       "x-exclude": true,
       "type": "object",
+      "discriminator": "eventType",
       "required": [
         "order",
         "userId",
-        "userName"
+        "userName",
+        "eventType"
       ],
       "properties": {
         "order": {
@@ -1155,6 +1160,9 @@
         },
         "userName": {
           "$ref": "#/definitions/orderChangeUserName"
+        },
+        "eventType": {
+          "type": "string"
         }
       }
     },
@@ -1974,11 +1982,32 @@
         }
       }
     },
+    "merchantMarketplaceEventBase": {
+      "x-exclude": true,
+      "type": "object",
+      "discriminator": "eventType",
+      "required": [
+        "merchantCode",
+        "marketplaceCode",
+        "eventType"
+      ],
+      "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "marketplaceCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "eventType": {
+          "type": "string"
+        }
+      }
+    },
     "merchantMarketplaceCredentialConfigured": {
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2004,7 +2033,7 @@
       "description": "When the merchant marketplace subscription has been requested",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2016,6 +2045,10 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "If the request is coming from an external system we will keep the identifier"
             }
           }
         }
@@ -2026,7 +2059,7 @@
       "description": "When the marketplace accept the mechant subscription request",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2048,7 +2081,7 @@
       "description": "When the marketplace refuses the merchant subscription",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2074,7 +2107,7 @@
       "description": "When the marketplace blocks the merchant subscription",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2099,7 +2132,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2120,7 +2153,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2141,7 +2174,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2162,7 +2195,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2183,7 +2216,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2204,7 +2237,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2225,7 +2258,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2246,7 +2279,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2309,7 +2342,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2337,7 +2370,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2367,7 +2400,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2406,7 +2439,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2427,7 +2460,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2448,7 +2481,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
@@ -2469,7 +2502,7 @@
       "x-format": "Event",
       "allOf": [
         {
-          "$ref": "#/definitions/merchantMarketplaceBase"
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
         },
         {
           "type": "object",
