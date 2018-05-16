@@ -1511,7 +1511,7 @@
         "gtin": {
           "$ref": "#/definitions/gtin"
         },
-        "marketPlaceProductId": {
+        "marketplaceProductId": {
           "description": "The marketplace product identifier of the order item",
           "example": "MarketplaceProductId",
           "type": "string"
@@ -1558,7 +1558,7 @@
         "customer": {
           "$ref": "#/definitions/orderCustomer"
         },
-        "adress": {
+        "address": {
           "$ref": "#/definitions/postalAddress"
         }
       }
@@ -1752,7 +1752,7 @@
           "type": "string",
           "example": "2017-04-16T10:25:23Z"
         },
-        "marketPlaceChannel": {
+        "marketplaceChannel": {
           "description": "Useful to identify the origin of the order. For example in Cdiscount.",
           "type": "string",
           "example": "Cdiscount France"
