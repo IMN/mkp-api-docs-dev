@@ -70,6 +70,11 @@
       "name": "Marketplaces - Orders - DRAFT - Batches",
       "description": "All batch operations on Orders to reduce call rate",
       "x-displayName": "Batches"
+    },
+    {
+      "name": "Marketplace API - List of Values - LOV",
+      "description": "All LOV operations",
+      "x-displayName": "LOV"
     }
   ],
   "paths": {
@@ -523,6 +528,137 @@
         "responses": {
           "204": {
             "description": "The merchant orders changes have been saved!"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/lov/v1/": {
+      "get": {
+        "summary": "Get all list names",
+        "operationId": "GetUserLovIndex",
+        "tags": [
+          "Marketplace API - List of Values - LOV"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list names",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/userLovIndex"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/lov/v1/{listName}": {
+      "get": {
+        "tags": [
+          "Marketplace API - List of Values - LOV"
+        ],
+        "summary": "Get the list of values related to this list name",
+        "operationId": "GetUserListOfValues",
+        "parameters": [
+          {
+            "name": "listName",
+            "in": "path",
+            "required": true,
+            "description": "The list of value name your want to get",
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/acceptLanguageParameter"
+          },
+          {
+            "$ref": "#/parameters/ifNoneMatchParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of values",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Content-Language": {
+                "description": "Indicates the language use in the response",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/userListOfValuesResponse"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "List not found",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1138,6 +1274,80 @@
           "items": {
             "$ref": "#/definitions/orderIdentifier"
           }
+        }
+      }
+    },
+    "userLovIndex": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/userLovIndexLinks"
+        }
+      }
+    },
+    "userLovIndexLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetUserLovIndexLink"
+        },
+        "lists": {
+          "$ref": "#/definitions/userLovLinks"
+        }
+      }
+    },
+    "userLovLinks": {
+      "description": "List of lov link. The key is the list name.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/links.GetUserListOfValuesLink"
+      }
+    },
+    "links.GetUserListOfValuesLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "example": {
+            "href": "/v1/user/lov/Go2CultureName",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetUserLovIndexLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "example": {
+            "href": "/v1/user/lov",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "userListOfValuesResponse": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/userListOfValuesResponseLinks"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/listOfValueItem"
+          }
+        }
+      }
+    },
+    "userListOfValuesResponseLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetUserListOfValuesLink"
         }
       }
     },
@@ -4823,6 +5033,12 @@
       "name": "Marketplaces - Orders - DRAFT",
       "tags": [
         "Marketplaces - Orders - DRAFT - Batches"
+      ]
+    },
+    {
+      "name": "Marketplace API - List of Values",
+      "tags": [
+        "Marketplace API - List of Values - LOV"
       ]
     }
   ],
