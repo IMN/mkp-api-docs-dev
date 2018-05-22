@@ -529,6 +529,18 @@
           "204": {
             "description": "The merchant orders changes have been saved!"
           },
+          "400": {
+            "description": "Invalid marketplace code or merchant code or there is duplicate order(s) in the request",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "403": {
+            "description": "The merchant has disabled the marketplace",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
           "default": {
             "$ref": "#/responses/GeneralError"
           }
@@ -1350,6 +1362,22 @@
           "$ref": "#/definitions/links.GetUserListOfValuesLink"
         }
       }
+    },
+    "orderCreated": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderMarketplaceInfo"
+        }
+      ]
+    },
+    "orderUpdated": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderMarketplaceInfo"
+        }
+      ]
     },
     "orderChangeEventBase": {
       "x-exclude": true,
@@ -4216,6 +4244,7 @@
       "example": "FRA"
     },
     "currencyCode": {
+      "x-exclude": true,
       "description": "The currency code <a href=\"https://en.wikipedia.org/wiki/ISO_4217\">(ISO 4217)</a>\n",
       "type": "string",
       "pattern": "^[A-Z]{3}$",
