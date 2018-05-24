@@ -438,6 +438,7 @@
           "Marketplace - Merchants API - Marketplace Merchant Code"
         ],
         "summary": "Configure marketplace merchant code",
+        "description": "By configuring the merchant identifier of the marketplace the marketplace will be able  to found the merchant easily using this identifier",
         "operationId": "ConfigureMarketplaceMerchantCode",
         "parameters": [
           {
@@ -1526,8 +1527,18 @@
     "imnOrderStatus": {
       "type": "string",
       "description": "IMN order status. Unified for all marketplaces.",
-      "example": "Shipped",
-      "x-lov": "IMNOrderState"
+      "example": "shipped",
+      "x-lov": "imnOrderStatus",
+      "enum": [
+        "new",
+        "pending",
+        "inProgress",
+        "received",
+        "shipped",
+        "cancelled",
+        "closed",
+        "availableOnStore"
+      ]
     },
     "marketplaceOrderStatus": {
       "description": "The marketplace order state",
