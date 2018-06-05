@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0",
     "title": "IMN marketplace API- DEV",
-    "description": "# The REST API of IMN system\n## Overview\nThe REST APIs provide programmatic access to read and write IMN data. \nBasically, with this API you will be able to do everything like you were with your browser on https://go.imn.io !\n\nThe main features are:\n- Register and manage your account\n- Create and manage and share your stores with your friends/co-workers.\n- Import your product catalog and schedule the auto importation\n- Search the channels your want to use\n- Configure your channels for your catalogs to export your product information:\n    - cost and general settings\n    - category and columns mappings\n    - your will be able to create and manage your custom column\n    - put in place exlusion filters based on simple conditions on your product data\n    - override product values\n    - get product vision for a channel catalog scope\n- Analyze and optimize your performance of your catalogs on all yours channels with different type of reportings by day, channel, category and by product.\n- Automatize your optimisation by using rules!\n- And of course... Manage your orders harvested from all your marketplaces:\n    - Synchronize your orders in an uniformized way\n    - Get the available actions and update the order status\n- ...and more!\n\n## Authentication credentials\nTBD\n\n## Things to keep in mind\n### API Rate Limits\n- The IMN REST API is limited to 100 calls/minute.\n\n### Media type\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\n\n### Required content type\nThe required and default encoding for the request and responses is UTF8.\n\n### Required date time format\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\n\n### Base URL\nThe Base URL of the IMN API Order Management REST API conforms to the following template.\n\nhttps://api.imn.io\n\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\n\nYou can test our API on https://api-docs.imn.io/swagger-ui\\\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\n",
+    "description": "\r\n# The REST API of IMN system - Marketplace\r\n## Overview\r\nThe REST APIs provide programmatic access to read and write IMN data. \r\n\r\nThis API allows the marketplace to push data to IMN.\r\n\r\n\r\nThe main features are:\r\n- Push merchant offers\r\n- Push merchant orders\r\n- ...\r\n\r\n\r\n## Things to keep in mind\r\n### API Rate Limits\r\n- The IMN REST API is limited to 100 calls/minute.\r\n\r\n### Media type\r\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\r\n\r\n### Required content type\r\nThe required and default encoding for the request and responses is UTF8.\r\n\r\n### Required date time format\r\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\r\n\r\n### Base URL\r\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\r\n\r\nYou can test our API on https://mkp-api-docs.imn.io/swagger-ui\\\\\r\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\r\n\r\n",
     "x-logo": {
       "url": "https://imngo.blob.core.windows.net/imngo/images/imn-logo.png",
       "backgroundColor": "#FFFFFF"
@@ -1358,6 +1358,7 @@
     },
     "batchMerchantMarketplaceOrders": {
       "x-format": "Message",
+      "type": "object",
       "description": "Create or replace orders for one marketplace for one merchant",
       "required": [
         "orders"
@@ -5305,6 +5306,13 @@
   "externalDocs": {
     "description": "Find the documentation for IMN's API here",
     "url": "https://api-docs.imn.io/"
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Ocp-Apim-Subscription-Key"
+    }
   },
   "x-tagGroups": [
     {
