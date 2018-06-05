@@ -70,6 +70,11 @@
       "x-displayName": "Global"
     },
     {
+      "name": "Marketplaces - Orders - Order Change Reporting",
+      "description": "The order change reporting operations",
+      "x-displayName": "Order Change Reporting"
+    },
+    {
       "name": "Marketplaces - Orders - Batches",
       "description": "All batch operations on Orders to reduce call rate",
       "x-displayName": "Batches"
@@ -5334,6 +5339,7 @@
     {
       "name": "Marketplaces - Orders",
       "tags": [
+        "Marketplaces - Orders - Order Change Reporting",
         "Marketplaces - Orders - Batches"
       ]
     },
