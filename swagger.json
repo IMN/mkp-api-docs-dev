@@ -1661,6 +1661,87 @@
         }
       ]
     },
+    "orderExceptionsBase": {
+      "x-exclude": true,
+      "type": "object",
+      "required": [
+        "marketplaceCode",
+        "merchantCode",
+        "imnOrderId"
+      ],
+      "properties": {
+        "marketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        },
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "imnOrderId": {
+          "$ref": "#/definitions/imnOrderId"
+        }
+      }
+    },
+    "orderNotFoundException": {
+      "x-format": "Exception",
+      "x-transient": false,
+      "x-technical": false,
+      "description": "The order '{imnOrderId}' is not found for the marketplace '{marketplaceCode}' and the merchant '{merchantCode}'\n",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderExceptionsBase"
+        }
+      ]
+    },
+    "orderChangeNotFoundException": {
+      "x-format": "Exception",
+      "x-transient": false,
+      "x-technical": false,
+      "description": "The order change '{correlationId}' is not found.\nOrder: '{imnOrderId}'\nMarketplace: '{marketplaceCode}' \nMerchant: '{merchantCode}'\n",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderExceptionsBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "marketplaceCode",
+            "merchantCode",
+            "imnOrderId",
+            "correlationId"
+          ],
+          "properties": {
+            "correlationId": {
+              "$ref": "#/definitions/correlationId"
+            }
+          }
+        }
+      ]
+    },
+    "orderChangeInProgressException": {
+      "x-format": "Exception",
+      "x-transient": false,
+      "x-technical": false,
+      "description": "There is an order change currently is progress for the '{imnOrderId}' for the marketplace '{marketplaceCode}' and the merchant '{merchantCode}'. |\nCurrent CorrelationId: '{currentCorrelationId}'\n",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderExceptionsBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "marketplaceCode",
+            "merchantCode",
+            "imnOrderId",
+            "currentCorrelationId"
+          ],
+          "properties": {
+            "currentCorrelationId": {
+              "$ref": "#/definitions/correlationId"
+            }
+          }
+        }
+      ]
+    },
     "imnOrderStatus": {
       "type": "string",
       "description": "IMN order status. Unified for all marketplaces.",
@@ -5392,6 +5473,40 @@
     }
   },
   "responses": {
+    "orderNotFound": {
+      "description": "The requested order is not found.",
+      "x-exceptions": [
+        "OrderNotFoundException"
+      ],
+      "schema": {
+        "$ref": "#/definitions/errorResponseMessage"
+      }
+    },
+    "orderChangeNotFound": {
+      "description": "The requested order or correlation identifier is not found.",
+      "x-exceptions": [
+        "OrderNotFoundException",
+        "OrderChangeNotFoundException"
+      ],
+      "schema": {
+        "$ref": "#/definitions/errorResponseMessage"
+      }
+    },
+    "orderChangeProcessing": {
+      "x-exceptions": [
+        "OrderChangeProcessingException"
+      ],
+      "description": "Already processing a change request for this Order.\\\nPlease refresh your clients Order information and retry later.\n",
+      "headers": {
+        "Retry-After": {
+          "type": "integer",
+          "description": "Indicates the duration in seconds to wait to be able to make this request again"
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/errorResponseMessage"
+      }
+    },
     "GeneralError": {
       "description": "Occurs when something goes wrong",
       "schema": {
