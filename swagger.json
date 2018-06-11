@@ -481,6 +481,70 @@
         }
       }
     },
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/purges/{correlationId}/done": {
+      "post": {
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "Inform IMN about the offer purge completed",
+        "operationId": "PurgeCompleted",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/correlationIdParameter"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The purge completion has been saved"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/purges/{correlationId}/failed": {
+      "post": {
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "Inform IMN about the offer purge failure",
+        "operationId": "PurgeFailed",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/correlationIdParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/userErrorMessage"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The purge failure has been saved"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/events": {
       "post": {
         "tags": [
@@ -557,7 +621,7 @@
         }
       }
     },
-    "/marketplace/orders/v1/{marketplaceCode}/{merchantCode}/{imnOrderId}/{correlationId}/done": {
+    "/marketplace/orders/v1/{marketplaceCode}/{merchantCode}/{imnOrderId}/changes/{correlationId}/done": {
       "post": {
         "tags": [
           "Marketplaces - Orders - Order Change Reporting"
@@ -597,7 +661,7 @@
         }
       }
     },
-    "/marketplace/orders/v1/{marketplaceCode}/{merchantCode}/{imnOrderId}/{correlationId}/failed": {
+    "/marketplace/orders/v1/{marketplaceCode}/{merchantCode}/{imnOrderId}/changes/{correlationId}/failed": {
       "post": {
         "tags": [
           "Marketplaces - Orders - Order Change Reporting"
@@ -2500,6 +2564,10 @@
         },
         "marketplaceCode": {
           "$ref": "#/definitions/marketplaceCode"
+        },
+        "eventType": {
+          "x-exclude": true,
+          "type": "string"
         }
       }
     },
@@ -5399,143 +5467,6 @@
       ]
     }
   ],
-  "parameters": {
-    "correlationIdParameter": {
-      "name": "correlationId",
-      "in": "path",
-      "type": "string",
-      "format": "CorrelationId",
-      "required": true,
-      "description": "The correlation id corresponding to the order change request"
-    },
-    "imnOrderIdParameter": {
-      "description": "The IMN Order identifier",
-      "name": "imnOrderId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "format": "imnOrderId",
-      "x-example": "A0CD3FG"
-    },
-    "userNameInQueryParameter": {
-      "name": "userName",
-      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
-      "in": "query",
-      "required": true,
-      "type": "string"
-    },
-    "testModeInQueryParameter": {
-      "name": "testMode",
-      "description": "If true, the operation will be not be sent to marketplace. But the validation will be taken in account.",
-      "in": "query",
-      "required": false,
-      "type": "boolean",
-      "default": false,
-      "x-example": false
-    },
-    "storeIdOnlyGeneralParameters": {
-      "name": "storeId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "format": "guid",
-      "description": "Your store identifier"
-    },
-    "pageNumberQueryStringParameter": {
-      "name": "pageNumber",
-      "description": "The page number you want to get",
-      "in": "query",
-      "required": true,
-      "type": "integer",
-      "format": "int32",
-      "minimum": 1,
-      "x-minimum": 1,
-      "x-example": 1
-    },
-    "pageSizeQueryStringParameter": {
-      "name": "pageSize",
-      "description": "The entry count you want to get",
-      "in": "query",
-      "required": true,
-      "type": "integer",
-      "format": "int32",
-      "minimum": 25,
-      "x-minimum": 25,
-      "maximum": 100,
-      "x-maximum": 100,
-      "x-example": 25
-    },
-    "ifNoneMatchParameter": {
-      "name": "If-None-Match",
-      "type": "string",
-      "in": "header",
-      "required": false,
-      "description": "ETag value to identify the last known version of requested resource.\\\nTo avoid useless exchange, we recommend you to indicate the ETag you previously got from this operation.\\\nIf the ETag value does not match the response will be 200 to give you a new content, otherwise the response will be: 304 Not Modified, without any content.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
-    },
-    "ifMatchParameter": {
-      "name": "If-Match",
-      "in": "header",
-      "type": "string",
-      "required": true,
-      "description": "ETag value to identify the last known version of requested resource.\\\nTo ensure that you are making a change on the lastest version of the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
-    },
-    "acceptLanguageParameter": {
-      "name": "Accept-Language",
-      "description": "Indicates that the client accepts the following languages.",
-      "in": "header",
-      "required": false,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "acceptEncodingRequiredParameter": {
-      "name": "Accept-Encoding",
-      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
-      "in": "header",
-      "required": true,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "acceptEncodingOptionalParameter": {
-      "name": "Accept-Encoding",
-      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
-      "in": "header",
-      "required": false,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "walletPropertyCodeParameter": {
-      "name": "walletPropertyCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The wallet document code"
-    },
-    "marketplaceCodeParameter": {
-      "format": "MarketplaceCode",
-      "name": "marketplaceCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The marketplace code"
-    },
-    "merchantCodeParameter": {
-      "format": "MerchantCode",
-      "name": "merchantCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The merchant code"
-    }
-  },
   "responses": {
     "orderNotFound": {
       "description": "The requested order is not found.",
@@ -5681,6 +5612,143 @@
       "schema": {
         "$ref": "#/definitions/userErrorMessage"
       }
+    }
+  },
+  "parameters": {
+    "imnOrderIdParameter": {
+      "description": "The IMN Order identifier",
+      "name": "imnOrderId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "imnOrderId",
+      "x-example": "A0CD3FG"
+    },
+    "userNameInQueryParameter": {
+      "name": "userName",
+      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
+      "in": "query",
+      "required": true,
+      "type": "string"
+    },
+    "testModeInQueryParameter": {
+      "name": "testMode",
+      "description": "If true, the operation will be not be sent to marketplace. But the validation will be taken in account.",
+      "in": "query",
+      "required": false,
+      "type": "boolean",
+      "default": false,
+      "x-example": false
+    },
+    "correlationIdParameter": {
+      "name": "correlationId",
+      "in": "path",
+      "type": "string",
+      "format": "CorrelationId",
+      "required": true,
+      "description": "It's the guid corresponding to the operation.\n"
+    },
+    "storeIdOnlyGeneralParameters": {
+      "name": "storeId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "guid",
+      "description": "Your store identifier"
+    },
+    "pageNumberQueryStringParameter": {
+      "name": "pageNumber",
+      "description": "The page number you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "x-minimum": 1,
+      "x-example": 1
+    },
+    "pageSizeQueryStringParameter": {
+      "name": "pageSize",
+      "description": "The entry count you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 25,
+      "x-minimum": 25,
+      "maximum": 100,
+      "x-maximum": 100,
+      "x-example": 25
+    },
+    "ifNoneMatchParameter": {
+      "name": "If-None-Match",
+      "type": "string",
+      "in": "header",
+      "required": false,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo avoid useless exchange, we recommend you to indicate the ETag you previously got from this operation.\\\nIf the ETag value does not match the response will be 200 to give you a new content, otherwise the response will be: 304 Not Modified, without any content.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "ifMatchParameter": {
+      "name": "If-Match",
+      "in": "header",
+      "type": "string",
+      "required": true,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo ensure that you are making a change on the lastest version of the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "acceptLanguageParameter": {
+      "name": "Accept-Language",
+      "description": "Indicates that the client accepts the following languages.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingRequiredParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": true,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingOptionalParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "walletPropertyCodeParameter": {
+      "name": "walletPropertyCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The wallet document code"
+    },
+    "marketplaceCodeParameter": {
+      "format": "MarketplaceCode",
+      "name": "marketplaceCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The marketplace code"
+    },
+    "merchantCodeParameter": {
+      "format": "MerchantCode",
+      "name": "merchantCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The merchant code"
     }
   }
 }
