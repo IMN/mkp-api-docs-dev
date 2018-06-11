@@ -486,8 +486,8 @@
         "tags": [
           "Marketplace API - Offers - Global"
         ],
-        "summary": "Save a batch of merchant offers",
-        "operationId": "SaveMerchantOfferBatch",
+        "summary": "Save a batch of marketplace merchant offers",
+        "operationId": "SaveMarketplaceMerchantOfferBatch",
         "parameters": [
           {
             "$ref": "#/parameters/marketplaceCodeParameter"
@@ -499,14 +499,14 @@
             "name": "request",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/batchMerchantOfferChanges"
+              "$ref": "#/definitions/batchMerchantMarketplaceOfferChanges"
             },
             "required": true
           }
         ],
         "responses": {
           "204": {
-            "description": "The merchant offers changes have been saved!"
+            "description": "The marketplace merchant offers changes have been saved!"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1667,6 +1667,25 @@
         }
       ]
     },
+    "orderChangeCompleted": {
+      "x-format": "Event",
+      "type": "object",
+      "required": [
+        "order",
+        "status"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "status": {
+          "$ref": "#/definitions/processingStatus"
+        },
+        "error": {
+          "$ref": "#/definitions/userErrorMessage"
+        }
+      }
+    },
     "orderExceptionsBase": {
       "x-exclude": true,
       "type": "object",
@@ -1723,7 +1742,7 @@
         }
       ]
     },
-    "orderChangeInProgressException": {
+    "orderChangeAlreadyInProgressException": {
       "x-format": "Exception",
       "x-transient": false,
       "x-technical": false,
@@ -2374,23 +2393,19 @@
     },
     "orderIMNInfo": {
       "type": "object",
+      "description": "The current order change correlation identifier indicates you if there is a pending order change on the marketplace side.",
       "required": [
-        "imnOrderUrl",
-        "imnLastModificationUtcDate",
-        "processing"
+        "imnLastModificationUtcDate"
       ],
       "properties": {
-        "imnOrderUrl": {
-          "$ref": "#/definitions/httpUrl"
-        },
         "imnLastModificationUtcDate": {
           "description": "The last modification UTC date done by IMN of this order",
           "format": "date-time",
           "type": "string",
           "example": "2017-04-16T10:30:23Z"
         },
-        "processing": {
-          "$ref": "#/definitions/orderProcessing"
+        "currentOrderChangeCorrelationId": {
+          "$ref": "#/definitions/correlationId"
         }
       }
     },
@@ -3458,7 +3473,7 @@
       "required": [
         "marketplaceApiCredential"
       ],
-      "description": "The marketplace credential '{marketplaceApiCredential}' is invalid\n",
+      "description": "Marketplace credentials are not recognized, please check them and try again\n",
       "properties": {
         "marketplaceApiCredential": {
           "$ref": "#/definitions/marketplaceApiCredential"
@@ -5306,6 +5321,40 @@
         "failed",
         "aborted"
       ]
+    },
+    "healthCheck": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Health check name",
+          "example": "MyDatabaseCheck"
+        },
+        "message": {
+          "type": "string",
+          "description": "Gets the status message of the check.",
+          "example": "Database connection OK"
+        },
+        "status": {
+          "$ref": "#/definitions/healthCheckStatus"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "healthCheckStatus": {
+      "type": "string",
+      "description": "Possible status values of a health check result.\n* degraded:  The check is degraded, failing but not critical\n* healthy: The check is healthy\n* ignored: The check was ignored\n* unhealthy:  The check is unhealthy\n",
+      "enum": [
+        "degraded",
+        "healthy",
+        "ignored",
+        "unhealthy"
+      ]
     }
   },
   "externalDocs": {
@@ -5355,6 +5404,7 @@
       "name": "correlationId",
       "in": "path",
       "type": "string",
+      "format": "CorrelationId",
       "required": true,
       "description": "The correlation id corresponding to the order change request"
     },
@@ -5506,9 +5556,9 @@
         "$ref": "#/definitions/errorResponseMessage"
       }
     },
-    "orderChangeProcessing": {
+    "orderChangeAlreadyInProgress": {
       "x-exceptions": [
-        "OrderChangeProcessingException"
+        "OrderChangeAlreadyInProgressException"
       ],
       "description": "Already processing a change request for this Order.\\\nPlease refresh your clients Order information and retry later.\n",
       "headers": {
