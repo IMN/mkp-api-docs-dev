@@ -1363,6 +1363,9 @@
             },
             "salesforceSubscriptionUrl": {
               "type": "string"
+            },
+            "ecommerceSoftwareName": {
+              "$ref": "#/definitions/ecommerceSoftwareName"
             }
           }
         }
@@ -1391,6 +1394,10 @@
         },
         "salesforceSubscriptionId": {
           "type": "string"
+        },
+        "ipAddress": {
+          "type": "string",
+          "example": "127.0.0.1"
         }
       }
     },
@@ -1872,6 +1879,29 @@
         },
         "error": {
           "$ref": "#/definitions/userErrorMessage"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
+        }
+      }
+    },
+    "orderShipmentOverdue": {
+      "x-format": "Event",
+      "type": "object",
+      "required": [
+        "order"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
         }
       }
     },
@@ -2178,6 +2208,29 @@
         }
       ]
     },
+    "abortOrderChange": {
+      "x-format": "Command",
+      "type": "object",
+      "required": [
+        "order"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
+        }
+      }
+    },
     "orderManagementDisabledException": {
       "x-format": "Exception",
       "x-transient": false,
@@ -2354,6 +2407,35 @@
           "properties": {
             "currentCorrelationId": {
               "$ref": "#/definitions/correlationId"
+            }
+          }
+        }
+      ]
+    },
+    "orderChangeTimeoutException": {
+      "x-format": "Exception",
+      "x-transient": false,
+      "x-technical": false,
+      "description": "The order change '{correlationId}': '{orderChangeType}' has received no response from the marketplace. The operation has timed out.\n",
+      "allOf": [
+        {
+          "$ref": "#/definitions/orderExceptionsBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "marketplaceCode",
+            "merchantCode",
+            "marketplaceOrderId",
+            "correlationId",
+            "orderChangeType"
+          ],
+          "properties": {
+            "correlationId": {
+              "$ref": "#/definitions/correlationId"
+            },
+            "orderChangeType": {
+              "$ref": "#/definitions/orderChangeType"
             }
           }
         }
@@ -2551,16 +2633,24 @@
       ]
     },
     "orderItems": {
-      "type": "object",
+      "type": "array",
       "description": "The key correspond to the order item identifier. Must be unique.",
-      "additionalProperties": {
+      "items": {
         "$ref": "#/definitions/orderItem"
       }
     },
     "orderItem": {
       "description": "Describe an order item.",
       "type": "object",
+      "required": [
+        "id"
+      ],
       "properties": {
+        "id": {
+          "type": "string",
+          "description": "The order item identifier. Must be unique in the order.",
+          "example": "1409211351GV25J-AUC2009994538238-0"
+        },
         "title": {
           "description": "The title of the order item",
           "example": "bLA acide-plomb 6v-4.5ah 70x48x106mm",
@@ -3034,6 +3124,25 @@
         }
       ]
     },
+    "merchantOfferUnpublished": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantOfferIdentifier"
+        },
+        {
+          "type": "object",
+          "required": [
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "$ref": "#/definitions/merchantOfferUnpublicationReasonCode"
+            }
+          }
+        }
+      ]
+    },
     "merchantOfferNotImported": {
       "x-format": "Event",
       "allOf": [
@@ -3053,41 +3162,15 @@
         }
       ]
     },
-    "MerchantOfferPushQueueReminded": {
-      "x-format": "Event",
-      "description": "The merchant offer pusher is reminded",
-      "allOf": [
-        {
-          "type": "object",
-          "required": [
-            "merchantCode",
-            "senderMessageId"
-          ],
-          "properties": {
-            "merchantCode": {
-              "$ref": "#/definitions/merchantCode"
-            },
-            "senderMessageId": {
-              "type": "string",
-              "format": "MessageId",
-              "description": "The sender message Id"
-            }
-          }
-        }
-      ]
-    },
     "duplicateMerchantOfferOperationException": {
       "x-format": "Exception",
       "x-transient": false,
       "x-technical": false,
-      "description": "Duplicate operation on an offer has been {duplicateCount} times for the merchant '{merchantCode}':\n- sku: '{sku}' \n- gtin: '{gtin}'\n- itemCondition: '{itemCondition}' \n- fulfilledBy: '{fulfilledBy}'\n",
+      "description": "Duplicate operation on an offer has been {duplicateCount} times for the merchant '{merchantCode}':\n- sku: '{sku}' \n",
       "type": "object",
       "required": [
         "merchantCode",
         "sku",
-        "gtin",
-        "itemCondition",
-        "fulfilledBy",
         "duplicateCount"
       ],
       "properties": {
@@ -3096,15 +3179,6 @@
         },
         "sku": {
           "$ref": "#/definitions/sku"
-        },
-        "gtin": {
-          "$ref": "#/definitions/gtin"
-        },
-        "itemCondition": {
-          "$ref": "#/definitions/itemCondition"
-        },
-        "fulfilledBy": {
-          "$ref": "#/definitions/fulfilledBy"
         },
         "duplicateCount": {
           "type": "integer",
@@ -3122,9 +3196,6 @@
         "marketplaceCode",
         "merchantCode",
         "sku",
-        "gtin",
-        "itemCondition",
-        "fulfilledBy",
         "duplicateCount"
       ],
       "properties": {
@@ -3136,15 +3207,6 @@
         },
         "sku": {
           "$ref": "#/definitions/sku"
-        },
-        "gtin": {
-          "$ref": "#/definitions/gtin"
-        },
-        "itemCondition": {
-          "$ref": "#/definitions/itemCondition"
-        },
-        "fulfilledBy": {
-          "$ref": "#/definitions/fulfilledBy"
         },
         "duplicateCount": {
           "type": "integer",
@@ -3171,6 +3233,15 @@
           "minItems": 1,
           "maxItems": 1000,
           "description": "Deleted offers",
+          "items": {
+            "$ref": "#/definitions/merchantOfferIdentifier"
+          }
+        },
+        "unpublished": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "description": "Unpublished offers",
           "items": {
             "$ref": "#/definitions/merchantOfferIdentifier"
           }
@@ -3245,9 +3316,7 @@
       "type": "object",
       "required": [
         "merchantCode",
-        "sku",
-        "gtin",
-        "itemCondition"
+        "sku"
       ],
       "properties": {
         "merchantCode": {
@@ -3255,15 +3324,6 @@
         },
         "sku": {
           "$ref": "#/definitions/sku"
-        },
-        "gtin": {
-          "$ref": "#/definitions/gtin"
-        },
-        "itemCondition": {
-          "$ref": "#/definitions/itemCondition"
-        },
-        "fulfilledBy": {
-          "$ref": "#/definitions/fulfilledBy"
         }
       }
     },
@@ -3302,6 +3362,15 @@
             "lastUpdateUtcDate"
           ],
           "properties": {
+            "gtin": {
+              "$ref": "#/definitions/gtin"
+            },
+            "itemCondition": {
+              "$ref": "#/definitions/itemCondition"
+            },
+            "fulfilledBy": {
+              "$ref": "#/definitions/fulfilledBy"
+            },
             "price": {
               "$ref": "#/definitions/price"
             },
@@ -3366,7 +3435,7 @@
     },
     "merchantOfferNoneImportationReasonCode": {
       "type": "string",
-      "description": "A reason code related",
+      "description": "A reason code related to a none importation of the offer",
       "enum": [
         "InvalidEAN",
         "InvariantNotAppliable"
@@ -3390,6 +3459,15 @@
           "description": "The actual value causing the none importation of the offer"
         }
       }
+    },
+    "merchantOfferUnpublicationReasonCode": {
+      "type": "string",
+      "description": "The reason of the unpublication of an offer",
+      "enum": [
+        "MerchantMarketplaceOfferPublicationDisabled",
+        "Excluded",
+        "OfferDisabled"
+      ]
     },
     "merchantEventPushed": {
       "x-exclude": true,
@@ -3533,6 +3611,33 @@
             },
             "userIPAddress": {
               "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "merchantMarketplaceCredentialExpired": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantEventPushed"
+        },
+        {
+          "$ref": "#/definitions/merchantMarketplaceEventBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "marketplaceCode",
+            "credential"
+          ],
+          "properties": {
+            "credential": {
+              "$ref": "#/definitions/marketplaceApiCredential"
+            },
+            "checkCount": {
+              "type": "integer"
             }
           }
         }
@@ -4605,6 +4710,64 @@
       ]
     },
     "disableMerchantMarketplaceOrderImportation": {
+      "x-format": "Command",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "userEmail",
+            "userIPAddress",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "reenableMerchantMarketplaceOfferImportation": {
+      "x-format": "Command",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantMarketplaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "merchantCode",
+            "userId",
+            "userEmail",
+            "userIPAddress",
+            "marketplaceCode"
+          ],
+          "properties": {
+            "userId": {
+              "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "disableMerchantMarketplaceOfferImportation": {
       "x-format": "Command",
       "allOf": [
         {
@@ -6715,9 +6878,9 @@
     },
     "userNameInQueryParameter": {
       "name": "userName",
-      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
+      "description": "Optional. Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
       "in": "query",
-      "required": true,
+      "required": false,
       "type": "string"
     },
     "testModeInQueryParameter": {
