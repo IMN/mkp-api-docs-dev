@@ -543,7 +543,7 @@
             "$ref": "#/parameters/merchantCodeParameter"
           },
           {
-            "$ref": "#/parameters/pageNumberQueryStringParameter"
+            "$ref": "#/parameters/paginationContinuationTokenQueryStringParameter"
           },
           {
             "$ref": "#/parameters/pageSizeQueryStringParameter"
