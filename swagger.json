@@ -53,6 +53,10 @@
       "x-displayName": "Global"
     },
     {
+      "name": "Marketplaces - Orders - Global",
+      "x-displayName": "Global"
+    },
+    {
       "name": "Marketplaces - Orders - Order Change Reporting",
       "x-displayName": "Order Change Reporting"
     },
@@ -3407,6 +3411,7 @@
     {
       "name": "Marketplaces - Orders",
       "tags": [
+        "Marketplaces - Orders - Global",
         "Marketplaces - Orders - Order Change Reporting",
         "Marketplaces - Orders - Batches"
       ]
