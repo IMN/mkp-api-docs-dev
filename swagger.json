@@ -3197,6 +3197,109 @@
           "example": "1"
         }
       }
+    },
+    "merchantOfferReceived": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantOfferEventBase"
+        },
+        {
+          "$ref": "#/definitions/merchantOffer"
+        }
+      ]
+    },
+    "merchantOfferDeleted": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantOfferEventBase"
+        },
+        {
+          "$ref": "#/definitions/merchantOfferIdentifier"
+        }
+      ]
+    },
+    "merchantOfferUnpublished": {
+      "x-format": "Event",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantOfferEventBase"
+        },
+        {
+          "$ref": "#/definitions/merchantOfferIdentifier"
+        },
+        {
+          "type": "object",
+          "required": [
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "$ref": "#/definitions/merchantOfferUnpublicationReasonCode"
+            }
+          }
+        }
+      ]
+    },
+    "merchantOfferNotImported": {
+      "x-format": "Event",
+      "description": "Useful for reporting to explain why this offer has not been imported. NOT USED FOR THE MOMENT.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/merchantOfferEventBase"
+        },
+        {
+          "$ref": "#/definitions/merchantOfferIdentifier"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "reasons": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/merchantOfferNoneImportationReason"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "merchantOfferUnpublicationReasonCode": {
+      "type": "string",
+      "description": "The reason of the unpublication of an offer",
+      "enum": [
+        "MerchantMarketplaceOfferPublicationDisabled",
+        "Excluded",
+        "OfferDisabled"
+      ]
+    },
+    "merchantOfferNoneImportationReason": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/merchantOfferNoneImportationReasonCode"
+        },
+        "error": {
+          "$ref": "#/definitions/userErrorMessage"
+        },
+        "propertyName": {
+          "type": "string",
+          "description": "The related property name causing the none importation of the offer"
+        },
+        "actualValue": {
+          "type": "string",
+          "description": "The actual value causing the none importation of the offer"
+        }
+      }
+    },
+    "merchantOfferNoneImportationReasonCode": {
+      "type": "string",
+      "description": "A reason code related to a none importation of the offer",
+      "enum": [
+        "InvalidEAN",
+        "InvariantNotAppliable"
+      ]
     }
   },
   "parameters": {
