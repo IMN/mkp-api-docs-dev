@@ -1097,8 +1097,8 @@
     },
     "deliverySpecification": {
       "type": "object",
+      "description": "Define the pricing for the delivery method if not specify default will be used",
       "required": [
-        "deliveryMethod",
         "price"
       ],
       "properties": {
