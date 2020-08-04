@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0",
     "title": "IMN Marketplace API  - DEV",
-    "description": "# The REST API of IMN system - Marketplace\r\n## Overview\r\nThe REST APIs provide programmatic access to read and write IMN data. \r\n\r\nThis API allows the marketplace to push data to IMN.\r\n\r\n\r\nThe main features are:\r\n- Push merchant offers\r\n- Push merchant orders\r\n- ...\r\n\r\n\r\n## Things to keep in mind\r\n### API Rate Limits\r\n- The IMN REST API is limited to 100 calls/minute.\r\n\r\n### Media type\r\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\r\n\r\n### Required content type\r\nThe required and default encoding for the request and responses is UTF8.\r\n\r\n### Required date time format\r\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\r\n\r\n### Base URL\r\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\r\n\r\nYou can test our API on https://mkp-api-docs.imn.io/swagger-ui\r\n\r\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\r\n\r\n",
+    "description": "# The REST API of IMN system - Marketplace\n## Overview\nThe REST APIs provide programmatic access to read and write IMN data. \n\nThis API allows the marketplace to push data to IMN.\n\n\nThe main features are:\n- Push merchant offers\n- Push merchant orders\n- ...\n\n\n## Things to keep in mind\n### API Rate Limits\n- The IMN REST API is limited to 100 calls/minute.\n\n### Media type\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\n\n### Required content type\nThe required and default encoding for the request and responses is UTF8.\n\n### Required date time format\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\n\n### Base URL\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\n\nYou can test our API on https://mkp-api-docs.imn.io/swagger-ui\n\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\n\n",
+    "version": "1.0",
     "x-logo": {
       "url": "https://imngo.blob.core.windows.net/imngo/images/imn-logo.png",
       "backgroundColor": "#FFFFFF"
@@ -29,18 +29,6 @@
   ],
   "tags": [
     {
-      "name": "Marketplace - Merchants API - Api Credentials",
-      "x-displayName": "Api Credentials"
-    },
-    {
-      "name": "Marketplace - Merchants API - Subscription",
-      "x-displayName": "Subscription"
-    },
-    {
-      "name": "Marketplace - Merchants API - Marketplace Merchant Code",
-      "x-displayName": "Marketplace Merchant Code"
-    },
-    {
       "name": "Marketplace API - Offers - Global",
       "x-displayName": "Global"
     },
@@ -62,226 +50,6 @@
     }
   ],
   "paths": {
-    "/marketplace/merchants/v1/{marketplaceCode}/{merchantCode}/apiCredential": {
-      "get": {
-        "tags": [
-          "Marketplace - Merchants API - Api Credentials"
-        ],
-        "summary": "Get the merchant API credential",
-        "operationId": "GetMerchantApiCredential",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The merchant API credential",
-            "schema": {
-              "$ref": "#/definitions/marketplaceApiCredential"
-            }
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Marketplace - Merchants API - Api Credentials"
-        ],
-        "summary": "Save the marketplace API credential",
-        "operationId": "SaveMerchantApiCredential",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "name": "credential",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/marketplaceApiCredential"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Merchant API credentials saved"
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "400": {
-            "$ref": "#/responses/invalidMerchantCode"
-          },
-          "403": {
-            "$ref": "#/responses/invalidMarketplaceCredential"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      }
-    },
-    "/marketplace/merchants/v1/{marketplaceCode}/{merchantCode}/subscription/accept": {
-      "post": {
-        "tags": [
-          "Marketplace - Merchants API - Subscription"
-        ],
-        "summary": "Accept a merchant subscription to a marketplace",
-        "operationId": "AcceptMerchantSubscription",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Merchant subscription accepted"
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "400": {
-            "$ref": "#/responses/invalidMerchantCode"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      }
-    },
-    "/marketplace/merchants/v1/{marketplaceCode}/{merchantCode}/subscription/decline": {
-      "post": {
-        "tags": [
-          "Marketplace - Merchants API - Subscription"
-        ],
-        "summary": "Decline a merchant subscription to a marketplace",
-        "operationId": "DeclineMerchantSubscription",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "name": "reason",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Merchant subscription declined"
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "400": {
-            "$ref": "#/responses/invalidMerchantCode"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      }
-    },
-    "/marketplace/merchants/v1/{marketplaceCode}/{merchantCode}/subscription/block": {
-      "post": {
-        "tags": [
-          "Marketplace - Merchants API - Subscription"
-        ],
-        "summary": "Block a merchant subscription to the marketplace",
-        "operationId": "BlockMerchantSubscription",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "name": "reason",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Merchant subscription blocked"
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "400": {
-            "$ref": "#/responses/invalidMerchantCode"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      }
-    },
-    "/marketplace/merchants/v1/{marketplaceCode}/{merchantCode}/configureMarketplaceMerchantCode": {
-      "post": {
-        "tags": [
-          "Marketplace - Merchants API - Marketplace Merchant Code"
-        ],
-        "summary": "Configure marketplace merchant code",
-        "description": "By configuring the merchant identifier of the marketplace the marketplace will be able  to found the merchant easily using this identifier",
-        "operationId": "ConfigureMarketplaceMerchantCode",
-        "parameters": [
-          {
-            "$ref": "#/parameters/marketplaceCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "name": "marketplaceMerchantCode",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/marketplaceMerchantCode"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Marketplace merchant code configured"
-          },
-          "404": {
-            "$ref": "#/responses/merchantOrMarketplaceNotFound"
-          },
-          "400": {
-            "$ref": "#/responses/invalidMerchantCode"
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        }
-      }
-    },
     "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/events": {
       "post": {
         "tags": [
@@ -832,101 +600,6 @@
     }
   },
   "definitions": {
-    "marketplaceApiCredential": {
-      "description": "The API credentials of the merchant on his marketplace.",
-      "type": "object",
-      "additionalProperties": {
-        "type": "string",
-        "example": {
-          "login": "mylogin",
-          "password": "myPassword"
-        }
-      }
-    },
-    "merchantMarketplaceSubscriptionRefusalReason": {
-      "type": "string",
-      "minLength": "5",
-      "x-minLength": "5",
-      "maxLength": "4000",
-      "x-maxLength": "4000",
-      "description": "The marketplace reason for the subscription's refusal"
-    },
-    "marketplaceMerchantCode": {
-      "type": "string",
-      "description": "The merchant code for a marketplace",
-      "example": "005145"
-    },
-    "errorResponseMessage": {
-      "x-exclude": true,
-      "type": "object",
-      "required": [
-        "errors"
-      ],
-      "properties": {
-        "errors": {
-          "type": "array",
-          "uniqueItems": "false",
-          "items": {
-            "$ref": "#/definitions/userErrorMessage"
-          }
-        }
-      }
-    },
-    "userErrorMessage": {
-      "x-exclude": true,
-      "type": "object",
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "docUrl": {
-          "$ref": "#/definitions/docUrl"
-        },
-        "code": {
-          "$ref": "#/definitions/errorCode"
-        },
-        "message": {
-          "type": "string",
-          "description": "The error message",
-          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
-        },
-        "cultureName": {
-          "$ref": "#/definitions/cultureName"
-        },
-        "arguments": {
-          "$ref": "#/definitions/userErrorMessageArguments"
-        }
-      }
-    },
-    "docUrl": {
-      "x-exclude": true,
-      "type": "string",
-      "format": "uri",
-      "description": "The documentation related to this operation.",
-      "example": "https://api-docs.imn.io/#operation/EnableChannelCatalog"
-    },
-    "errorCode": {
-      "x-exclude": true,
-      "type": "string",
-      "description": "the error code. The error code can be a pattern containing the argument's name",
-      "example": "CatalogImportationAlreadyInProgress(ExecutionId currentCatalogImportationId)"
-    },
-    "cultureName": {
-      "x-exclude": true,
-      "type": "string",
-      "description": "If the error is translated, the culture name will be indicated",
-      "example": "en",
-      "x-lov": "Go2CultureName"
-    },
-    "userErrorMessageArguments": {
-      "x-exclude": true,
-      "type": "object",
-      "description": "a dictionary string/object",
-      "additionalProperties": {
-        "type": "object"
-      }
-    },
     "merchantOfferEventBase": {
       "x-exclude": true,
       "type": "object",
@@ -1022,6 +695,22 @@
         }
       ]
     },
+    "errorResponseMessage": {
+      "x-exclude": true,
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "uniqueItems": "false",
+          "items": {
+            "$ref": "#/definitions/userErrorMessage"
+          }
+        }
+      }
+    },
     "paginationContinuationToken": {
       "type": "string",
       "description": "Just a string value that will help to get the next page"
@@ -1113,6 +802,33 @@
         }
       }
     },
+    "userErrorMessage": {
+      "x-exclude": true,
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "docUrl": {
+          "$ref": "#/definitions/docUrl"
+        },
+        "code": {
+          "$ref": "#/definitions/errorCode"
+        },
+        "message": {
+          "type": "string",
+          "description": "The error message",
+          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
+        },
+        "cultureName": {
+          "$ref": "#/definitions/cultureName"
+        },
+        "arguments": {
+          "$ref": "#/definitions/userErrorMessageArguments"
+        }
+      }
+    },
     "gtin": {
       "type": "string",
       "description": "Global Trade Item Number (GTIN) of the item.\nSupported values:\n\n- UPC (in North America / GTIN-12)\n12-digit number like 323456789012\n8-digit UPC-E codes should be converted to 12-digit codes\n- EAN (in Europe / GTIN-13)\n13-digit number like 3001234567892\n- JAN (in Japan / GTIN-13)\n8 or 13-digit number like 49123456 or 4901234567894\n- ISBN (for books)\n10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13\n- ITF-14 (for multipacks / GTIN-14)\n14-digit number like 10856435001702\n\nSchema.org property:\n- [Offer.gtin8](http://schema.org/gtin8)\n- [Offer.gtin12](http://schema.org/gtin12)\n- [Offer.gtin13](http://schema.org/gtin13)\n- [Offer.gtin14](http://schema.org/gtin14)\n- [Offer.isbn](http://schema.org/isbn)\n",
@@ -1138,6 +854,34 @@
       "type": "string",
       "format": "date-time",
       "description": "The date after when the item is not valid. For example the end of an offer, salary period, or a period of opening hours. http://schema.org/validThrough"
+    },
+    "docUrl": {
+      "x-exclude": true,
+      "type": "string",
+      "format": "uri",
+      "description": "The documentation related to this operation.",
+      "example": "https://api-docs.imn.io/#operation/EnableChannelCatalog"
+    },
+    "errorCode": {
+      "x-exclude": true,
+      "type": "string",
+      "description": "the error code. The error code can be a pattern containing the argument's name",
+      "example": "CatalogImportationAlreadyInProgress(ExecutionId currentCatalogImportationId)"
+    },
+    "cultureName": {
+      "x-exclude": true,
+      "type": "string",
+      "description": "If the error is translated, the culture name will be indicated",
+      "example": "en",
+      "x-lov": "Go2CultureName"
+    },
+    "userErrorMessageArguments": {
+      "x-exclude": true,
+      "type": "object",
+      "description": "a dictionary string/object",
+      "additionalProperties": {
+        "type": "object"
+      }
     },
     "merchantCode": {
       "type": "string",
@@ -2443,40 +2187,6 @@
     }
   },
   "responses": {
-    "merchantOrMarketplaceNotFound": {
-      "description": "The merchant code or marketplace code is not found.",
-      "x-exceptions": [
-        "MarketplaceCodeNotFoundException",
-        "MerchantCodeNotFoundException"
-      ],
-      "schema": {
-        "$ref": "#/definitions/errorResponseMessage"
-      }
-    },
-    "GeneralError": {
-      "description": "Occurs when something goes wrong",
-      "schema": {
-        "$ref": "#/definitions/errorResponseMessage"
-      }
-    },
-    "invalidMerchantCode": {
-      "description": "The merchant code is different from the state",
-      "x-exceptions": [
-        "InvalidMerchantCodeException"
-      ],
-      "schema": {
-        "$ref": "#/definitions/errorResponseMessage"
-      }
-    },
-    "invalidMarketplaceCredential": {
-      "description": "The marketplace credential is invalid",
-      "x-exceptions": [
-        "InvalidMarketplaceCredentialException"
-      ],
-      "schema": {
-        "$ref": "#/definitions/errorResponseMessage"
-      }
-    },
     "offerBatchBadRequest": {
       "description": "In case there is an error like:\n- ValidationException\n- DuplicateMerchantOfferOperationException\n- DuplicateMerchantMarketplaceOfferOperationException\n- InvalidMarketplaceCodeException\n- InvalidMerchantCodeException\n",
       "x-exceptions": [
@@ -2486,6 +2196,12 @@
         "InvalidMarketplaceCodeException",
         "InvalidMerchantCodeException"
       ],
+      "schema": {
+        "$ref": "#/definitions/errorResponseMessage"
+      }
+    },
+    "GeneralError": {
+      "description": "Occurs when something goes wrong",
       "schema": {
         "$ref": "#/definitions/errorResponseMessage"
       }
@@ -2534,14 +2250,6 @@
     "url": "https://api-docs.imn.io/"
   },
   "x-tagGroups": [
-    {
-      "name": "Marketplace - Merchants API",
-      "tags": [
-        "Marketplace - Merchants API - Api Credentials",
-        "Marketplace - Merchants API - Subscription",
-        "Marketplace - Merchants API - Marketplace Merchant Code"
-      ]
-    },
     {
       "name": "Marketplace API - Offers",
       "tags": [
