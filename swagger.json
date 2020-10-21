@@ -872,8 +872,7 @@
       "x-exclude": true,
       "type": "string",
       "description": "If the error is translated, the culture name will be indicated",
-      "example": "en",
-      "x-lov": "Go2CultureName"
+      "example": "en"
     },
     "userErrorMessageArguments": {
       "x-exclude": true,
