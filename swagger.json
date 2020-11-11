@@ -1745,11 +1745,6 @@
           "description": "If the parameter is an object with flexible properties (additionProperties/dictionary), we will describe the properties of the object.",
           "additionalProperties": {
             "$ref": "#/definitions/linkParameterProperty3"
-          },
-          "example": {
-            "shipOrder": {
-              "type": "​string"
-            }
           }
         }
       }
