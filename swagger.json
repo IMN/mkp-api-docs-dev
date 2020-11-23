@@ -616,14 +616,14 @@
     "merchantOfferPaginatedList": {
       "type": "object",
       "properties": {
-        "paginationContinuationToken": {
-          "$ref": "#/definitions/paginationContinuationToken"
-        },
         "merchantOffers": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/merchantOffer"
           }
+        },
+        "paginationContinuationToken": {
+          "$ref": "#/definitions/paginationContinuationToken"
         }
       }
     },
