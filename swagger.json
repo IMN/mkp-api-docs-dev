@@ -417,7 +417,7 @@
             "name": "imnLastModificationUtcDate",
             "in": "query",
             "type": "string",
-            "format": "DateTime"
+            "format": "date-time"
           }
         ],
         "responses": {
