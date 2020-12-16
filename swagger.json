@@ -227,6 +227,9 @@
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
           },
+          "502": {
+            "$ref": "#/responses/offerBatchBadRequest"
+          },
           "default": {
             "$ref": "#/responses/GeneralError"
           }
@@ -254,6 +257,40 @@
         "responses": {
           "204": {
             "description": "The merchant offers publication have been completed!"
+          },
+          "400": {
+            "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/publications/{correlationId}/status": {
+      "get": {
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "Get status of the publication of merchant offers",
+        "operationId": "GetMerchantOffersPublicationStatus",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/correlationIdParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The publication status",
+            "schema": {
+              "$ref": "#/definitions/feedPublicationStatusResponse"
+            }
           },
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
@@ -695,6 +732,18 @@
         }
       ]
     },
+    "feedPublicationStatusResponse": {
+      "description": "Publication Status Response",
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/feedPublicationStatus"
+        }
+      }
+    },
     "errorResponseMessage": {
       "x-exclude": true,
       "type": "object",
@@ -801,6 +850,16 @@
           "$ref": "#/definitions/price"
         }
       }
+    },
+    "feedPublicationStatus": {
+      "type": "string",
+      "enum": [
+        "NotStarted",
+        "InProgress",
+        "Success",
+        "Failed"
+      ],
+      "default": "NotStarted"
     },
     "userErrorMessage": {
       "x-exclude": true,
