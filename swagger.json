@@ -17,7 +17,6 @@
     }
   },
   "host": "api.imn.io",
-  "basePath": "",
   "schemes": [
     "https"
   ],
@@ -50,6 +49,34 @@
     }
   ],
   "paths": {
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/purge": {
+      "post": {
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "Purge all merchant offers",
+        "operationId": "PurgeMerchantOfferEvents",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The merchant offers changes have been received"
+          },
+          "400": {
+            "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/events": {
       "post": {
         "tags": [
@@ -183,6 +210,10 @@
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
           },
+          "502": {
+            "description": "In case of unavailability",
+            "x-ignore-response-content": "true"
+          },
           "default": {
             "$ref": "#/responses/GeneralError"
           }
@@ -228,7 +259,8 @@
             "$ref": "#/responses/offerBatchBadRequest"
           },
           "502": {
-            "$ref": "#/responses/offerBatchBadRequest"
+            "description": "In case of unavailability",
+            "x-ignore-response-content": "true"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -260,6 +292,10 @@
           },
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "502": {
+            "description": "In case of unavailability",
+            "x-ignore-response-content": "true"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -294,6 +330,10 @@
           },
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "502": {
+            "description": "In case of unavailability",
+            "x-ignore-response-content": "true"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
