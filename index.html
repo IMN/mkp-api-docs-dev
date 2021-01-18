@@ -3,11 +3,11 @@
   <head>
     <title>IMN Marketplace API Specification</title>
     <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="https://imngo.blob.core.windows.net/imngo/AzureLoginPage/favicon.ico" />
 
-  <link rel="shortcut icon" type="image/png" href="https://imngo.blob.core.windows.net/imngo/AzureLoginPage/favicon.ico" />
-	
-	
     <!--
     ReDoc uses font options from the parent element
     So override default browser styles
@@ -20,8 +20,9 @@
     </style>
   </head>
   <body>
-    <redoc spec-url="./swagger.json" lazy-rendering>
+    <redoc spec-url="./swagger.json" lazy-rendering nativeScrollbars expandResponses="200,201,202,204" nativeScrollbars>
     </redoc>
-    <script src="https://rebilly.github.io/ReDoc/releases/latest/redoc.min.js"> </script>
+        <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+
   </body>
 </html>
