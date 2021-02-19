@@ -659,9 +659,6 @@
       "properties": {
         "eventType": {
           "type": "string"
-        },
-        "partitionKey": {
-          "type": "string"
         }
       }
     },
