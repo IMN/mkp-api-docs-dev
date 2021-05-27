@@ -55,6 +55,8 @@
           "Marketplace API - Offers - Global"
         ],
         "summary": "Push a batch of merchant marketplace offers events",
+        "description": "Use v2 to reduce the request complexity",
+        "deprecated": true,
         "operationId": "PushMerchantOfferEvents",
         "parameters": [
           {
@@ -79,6 +81,88 @@
         "responses": {
           "202": {
             "description": "The merchant offers changes have been received"
+          },
+          "400": {
+            "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/events/v2": {
+      "post": {
+        "x-releaseStatus": "DRAFT",
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "[DRAFT] Push a batch of merchant marketplace offers events",
+        "operationId": "PushMerchantOfferEventsV2",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1000,
+              "items": {
+                "$ref": "#/definitions/offerStatusBase"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The merchant offers changes have been accepted"
+          },
+          "400": {
+            "$ref": "#/responses/offerBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/marketplace/offers/v1/{marketplaceCode}/{merchantCode}/marketplacePublication/events": {
+      "post": {
+        "x-releaseStatus": "DRAFT",
+        "tags": [
+          "Marketplace API - Offers - Global"
+        ],
+        "summary": "[DRAFT] Synchronize IMN about offer publication events done on the marketplace",
+        "operationId": "PushMarketplacePublicationEvents",
+        "parameters": [
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1000,
+              "items": {
+                "$ref": "#/definitions/offerPublicationStatusBase"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Events about offer publication done on the marketplace accepted"
           },
           "400": {
             "$ref": "#/responses/offerBatchBadRequest"
@@ -662,6 +746,52 @@
         }
       }
     },
+    "offerStatusBase": {
+      "x-exclude": true,
+      "type": "object",
+      "discriminator": "type",
+      "required": [
+        "type",
+        "sku",
+        "utcDate"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "sku": {
+          "$ref": "#/definitions/sku"
+        },
+        "utcDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the status has changed"
+        }
+      }
+    },
+    "offerPublicationStatusBase": {
+      "x-exclude": true,
+      "type": "object",
+      "discriminator": "type",
+      "required": [
+        "type",
+        "sku",
+        "utcDate"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "sku": {
+          "$ref": "#/definitions/sku"
+        },
+        "utcDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the status has changed"
+        }
+      }
+    },
     "merchantOfferPaginatedList": {
       "type": "object",
       "properties": {
@@ -679,7 +809,7 @@
     "merchantOffer": {
       "allOf": [
         {
-          "$ref": "#/definitions/merchantOfferIdentifier"
+          "$ref": "#/definitions/offer"
         },
         {
           "type": "object",
@@ -696,49 +826,8 @@
             "lastUpdateUtcDate"
           ],
           "properties": {
-            "gtin": {
-              "$ref": "#/definitions/gtin"
-            },
-            "itemCondition": {
-              "$ref": "#/definitions/itemCondition"
-            },
-            "fulfilledBy": {
-              "$ref": "#/definitions/fulfilledBy"
-            },
-            "price": {
-              "$ref": "#/definitions/price"
-            },
-            "priceCurrency": {
-              "$ref": "#/definitions/priceCurrency"
-            },
-            "minPrice": {
-              "$ref": "#/definitions/minPrice"
-            },
-            "discount": {
-              "$ref": "#/definitions/priceSpecification"
-            },
-            "deliveryLeadTime": {
-              "$ref": "#/definitions/deliveryLeadTime"
-            },
-            "inventoryLevel": {
-              "$ref": "#/definitions/inventoryLevel"
-            },
-            "defaultDeliveryMethod": {
-              "$ref": "#/definitions/deliveryMethod"
-            },
-            "deliverySpecifications": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/deliverySpecification"
-              }
-            },
-            "lastUpdateUtcDate": {
-              "type": "string",
-              "format": "date-time",
-              "example": "2018-02-24T14:24:35"
-            },
-            "sourceMarketplaceCode": {
-              "$ref": "#/definitions/marketplaceCode"
+            "merchantCode": {
+              "$ref": "#/definitions/merchantCode"
             }
           }
         }
@@ -772,24 +861,121 @@
         }
       }
     },
+    "sku": {
+      "type": "string",
+      "description": "The Stock Keeping Unit (SKU), i.e. a merchant-specific identifier for a product or service, or the product to which the offer refers. http://schema.org/sku",
+      "maxLength": 50
+    },
     "paginationContinuationToken": {
       "type": "string",
       "description": "Just a string value that will help to get the next page"
     },
-    "merchantOfferIdentifier": {
+    "offer": {
       "type": "object",
+      "description": "The defaultDeliveryMethod is required if the deliverySpecifications is fulfilled",
       "required": [
-        "merchantCode",
-        "sku"
+        "sku",
+        "gtin",
+        "itemCondition",
+        "price",
+        "priceCurrency",
+        "deliveryLeadTime",
+        "inventoryLevel",
+        "lastUpdateUtcDate"
       ],
       "properties": {
-        "merchantCode": {
-          "$ref": "#/definitions/merchantCode"
-        },
         "sku": {
           "$ref": "#/definitions/sku"
+        },
+        "gtin": {
+          "$ref": "#/definitions/gtin"
+        },
+        "itemCondition": {
+          "$ref": "#/definitions/itemCondition"
+        },
+        "fulfilledBy": {
+          "$ref": "#/definitions/fulfilledBy"
+        },
+        "price": {
+          "$ref": "#/definitions/price"
+        },
+        "priceCurrency": {
+          "$ref": "#/definitions/priceCurrency"
+        },
+        "minPrice": {
+          "$ref": "#/definitions/minPrice"
+        },
+        "discount": {
+          "$ref": "#/definitions/priceSpecification"
+        },
+        "deliveryLeadTime": {
+          "$ref": "#/definitions/deliveryLeadTime"
+        },
+        "inventoryLevel": {
+          "$ref": "#/definitions/inventoryLevel"
+        },
+        "defaultDeliveryMethod": {
+          "$ref": "#/definitions/deliveryMethod"
+        },
+        "deliverySpecifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deliverySpecification"
+          }
+        },
+        "lastUpdateUtcDate": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2018-02-24T14:24:35"
+        },
+        "sourceMarketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
         }
       }
+    },
+    "feedPublicationStatus": {
+      "type": "string",
+      "enum": [
+        "NotStarted",
+        "InProgress",
+        "Success",
+        "Failed"
+      ],
+      "default": "NotStarted"
+    },
+    "userErrorMessage": {
+      "x-exclude": true,
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "docUrl": {
+          "$ref": "#/definitions/docUrl"
+        },
+        "code": {
+          "$ref": "#/definitions/errorCode"
+        },
+        "message": {
+          "type": "string",
+          "description": "The error message",
+          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
+        },
+        "cultureName": {
+          "$ref": "#/definitions/cultureName"
+        },
+        "arguments": {
+          "$ref": "#/definitions/userErrorMessageArguments"
+        }
+      }
+    },
+    "merchantCode": {
+      "type": "string",
+      "description": "The merchant code identifier in IMN",
+      "pattern": "^([A-Z|0-9]){5}$",
+      "x-pattern": "^([A-Z|0-9]){5}$",
+      "example": "MLT01"
     },
     "itemCondition": {
       "type": "string",
@@ -863,69 +1049,6 @@
         }
       }
     },
-    "feedPublicationStatus": {
-      "type": "string",
-      "enum": [
-        "NotStarted",
-        "InProgress",
-        "Success",
-        "Failed"
-      ],
-      "default": "NotStarted"
-    },
-    "userErrorMessage": {
-      "x-exclude": true,
-      "type": "object",
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "docUrl": {
-          "$ref": "#/definitions/docUrl"
-        },
-        "code": {
-          "$ref": "#/definitions/errorCode"
-        },
-        "message": {
-          "type": "string",
-          "description": "The error message",
-          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
-        },
-        "cultureName": {
-          "$ref": "#/definitions/cultureName"
-        },
-        "arguments": {
-          "$ref": "#/definitions/userErrorMessageArguments"
-        }
-      }
-    },
-    "gtin": {
-      "type": "string",
-      "description": "Global Trade Item Number (GTIN) of the item.\nSupported values:\n\n- UPC (in North America / GTIN-12)\n12-digit number like 323456789012\n8-digit UPC-E codes should be converted to 12-digit codes\n- EAN (in Europe / GTIN-13)\n13-digit number like 3001234567892\n- JAN (in Japan / GTIN-13)\n8 or 13-digit number like 49123456 or 4901234567894\n- ISBN (for books)\n10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13\n- ITF-14 (for multipacks / GTIN-14)\n14-digit number like 10856435001702\n\nSchema.org property:\n- [Offer.gtin8](http://schema.org/gtin8)\n- [Offer.gtin12](http://schema.org/gtin12)\n- [Offer.gtin13](http://schema.org/gtin13)\n- [Offer.gtin14](http://schema.org/gtin14)\n- [Offer.isbn](http://schema.org/isbn)\n",
-      "maxLength": 50
-    },
-    "deliveryMethod": {
-      "type": "string",
-      "description": "A delivery method is a standardized procedure for transferring the product or service to the destination of fulfillment chosen by the customer. Delivery methods are characterized by the means of transportation used, and by the organization or group that is the contracting party for the sending organization or person."
-    },
-    "marketplaceCode": {
-      "type": "string",
-      "description": "The marketplace code identifier in IMN.\nFor now we have:\n- C1 for Cdiscount\n- E1 for ePrice\n- R1 for Real.DE\n- B1 for BOL\n- E2 for eMAG\n",
-      "pattern": "^([A-Z]|[0-9]){2}$",
-      "x-pattern": "^([A-Z]|[0-9]){2}$",
-      "example": "C1"
-    },
-    "validFrom": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The date when the item becomes valid. http://schema.org/validFrom"
-    },
-    "validThrough": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The date after when the item is not valid. For example the end of an offer, salary period, or a period of opening hours. http://schema.org/validThrough"
-    },
     "docUrl": {
       "x-exclude": true,
       "type": "string",
@@ -953,17 +1076,31 @@
         "type": "object"
       }
     },
-    "merchantCode": {
+    "gtin": {
       "type": "string",
-      "description": "The merchant code identifier in IMN",
-      "pattern": "^([A-Z|0-9]){5}$",
-      "x-pattern": "^([A-Z|0-9]){5}$",
-      "example": "MLT01"
-    },
-    "sku": {
-      "type": "string",
-      "description": "The Stock Keeping Unit (SKU), i.e. a merchant-specific identifier for a product or service, or the product to which the offer refers. http://schema.org/sku",
+      "description": "Global Trade Item Number (GTIN) of the item.\nSupported values:\n\n- UPC (in North America / GTIN-12)\n12-digit number like 323456789012\n8-digit UPC-E codes should be converted to 12-digit codes\n- EAN (in Europe / GTIN-13)\n13-digit number like 3001234567892\n- JAN (in Japan / GTIN-13)\n8 or 13-digit number like 49123456 or 4901234567894\n- ISBN (for books)\n10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13\n- ITF-14 (for multipacks / GTIN-14)\n14-digit number like 10856435001702\n\nSchema.org property:\n- [Offer.gtin8](http://schema.org/gtin8)\n- [Offer.gtin12](http://schema.org/gtin12)\n- [Offer.gtin13](http://schema.org/gtin13)\n- [Offer.gtin14](http://schema.org/gtin14)\n- [Offer.isbn](http://schema.org/isbn)\n",
       "maxLength": 50
+    },
+    "deliveryMethod": {
+      "type": "string",
+      "description": "A delivery method is a standardized procedure for transferring the product or service to the destination of fulfillment chosen by the customer. Delivery methods are characterized by the means of transportation used, and by the organization or group that is the contracting party for the sending organization or person."
+    },
+    "marketplaceCode": {
+      "type": "string",
+      "description": "The marketplace code identifier in IMN.\nFor now we have:\n- C1 for Cdiscount\n- E1 for ePrice\n- R1 for Real.DE\n- B1 for BOL\n- E2 for eMAG\n",
+      "pattern": "^([A-Z]|[0-9]){2}$",
+      "x-pattern": "^([A-Z]|[0-9]){2}$",
+      "example": "C1"
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date when the item becomes valid. http://schema.org/validFrom"
+    },
+    "validThrough": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date after when the item is not valid. For example the end of an offer, salary period, or a period of opening hours. http://schema.org/validThrough"
     },
     "batchMerchantMarketplaceOrders": {
       "x-format": "Message",
