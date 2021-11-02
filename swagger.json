@@ -2,14 +2,14 @@
   "swagger": "2.0",
   "info": {
     "title": "IMN Marketplace API  - DEV",
-    "description": "# The REST API of IMN system - Marketplace\r\n## Overview\r\nThe REST APIs provide programmatic access to read and write IMN data. \r\n\r\nThis API allows the marketplace to push data to IMN.\r\n\r\n\r\nThe main features are:\r\n- Push merchant offers\r\n- Push merchant orders\r\n- ...\r\n\r\n\r\n## Things to keep in mind\r\n### API Rate Limits\r\n- The IMN REST API is limited to 100 calls/minute.\r\n\r\n### Media type\r\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\r\n\r\n### Required content type\r\nThe required and default encoding for the request and responses is UTF8.\r\n\r\n### Required date time format\r\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\r\n\r\n### Base URL\r\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\r\n\r\nYou can test our API on https://mkp-api-docs.imn.io/swagger-ui\r\n\r\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\r\n\r\n",
+    "description": "# The REST API of IMN system - Marketplace\n## Overview\nThe REST APIs provide programmatic access to read and write IMN data. \n\nThis API allows the marketplace to push data to IMN.\n\n\nThe main features are:\n- Push merchant offers\n- Push merchant orders\n- ...\n\n\n## Things to keep in mind\n### API Rate Limits\n- The IMN REST API is limited to 100 calls/minute.\n\n### Media type\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\n\n### Required content type\nThe required and default encoding for the request and responses is UTF8.\n\n### Required date time format\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\n\n### Base URL\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\n\nYou can test our API on https://mkp-api-docs.imn.io/swagger-ui\n\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\n\n",
     "version": "1.0",
     "x-logo": {
       "url": "https://imngo.blob.core.windows.net/imngo/images/imn-logo.png",
       "backgroundColor": "#FFFFFF"
     },
     "contact": {
-      "email": "contact@imnnow.com"
+      "email": "support@imn.io"
     },
     "license": {
       "name": "IMN",
